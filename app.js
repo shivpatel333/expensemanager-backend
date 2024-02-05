@@ -18,13 +18,14 @@ db.then(()=>{
 
 //require all routes...
 
-const userRoutes = require("./routes/UserRoutes.js")
-
+const userRoutes = require("./routes/UserRoutes")
+const categoryRoutes = require("./routes/CategoryRoutes")
 
 
 //provinding to server all routes...
 
 app.use("/users",userRoutes)
+app.use("/categories",categoryRoutes)
 
 //localhost:4000/emplyees/employee
 
