@@ -20,11 +20,11 @@ const getUsers = async (req, res) => {
   const users = [
     {
       id: 1,
-      name: "amit",
+      name: "tejas",
     },
     {
       id: 2,
-      name: "raj",
+      name: "ram",
     },
   ];
 
