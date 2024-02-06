@@ -13,6 +13,11 @@ const UserSchema = new Schema({
     },
     password:{
         type: String,
+    },
+    Role:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Role',
+        required:true
     }
 })
 
