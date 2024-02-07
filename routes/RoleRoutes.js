@@ -1,5 +1,11 @@
-const roleController = require('../controllers/RoleController');
-const router = require('express').Router();
-router.post("/role", roleController.createRole);
-router.get("/role", roleController.getRoles);
+const express = require('express');
+const router = express.Router();
+const rolesController = require('../controllers/RoleController');
+
+// GET all roles
+router.get('/', rolesController.getRoles);
+
+// POST create a new role
+router.post('/', rolesController.createRole);
+
 module.exports = router;
