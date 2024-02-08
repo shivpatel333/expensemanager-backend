@@ -32,6 +32,10 @@ const transactionSchema = new mongoose.Schema({
   },
   description: {
     type: String
+  },
+  type: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TransactionType'
   }
 });
 
