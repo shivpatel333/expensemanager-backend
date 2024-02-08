@@ -1,7 +1,18 @@
 const Role = require('../models/RoleModel');
 
-// Function to get all roles
-const getRoles = async (req, res) => {
+// Controller function to create a new role
+const createRole = async (req, res) => {
+  try {
+    const newRole = new Role(req.body);
+    await newRole.save();
+    res.status(201).json(newRole);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Controller function to get all roles
+const getAllRoles = async (req, res) => {
   try {
     const roles = await Role.find();
     res.json(roles);
@@ -10,47 +21,49 @@ const getRoles = async (req, res) => {
   }
 };
 
-// Function to create a new role
-const createRole = async (req, res) => {
-  const { name } = req.body;
-
+// Controller function to get a role by ID
+const getRoleById = async (req, res) => {
   try {
-    const roleExists = await Role.findOne({ name });
-
-    if (roleExists) {
-      return res.status(400).json({ message: 'Role already exists' });
+    const role = await Role.findById(req.params.id);
+    if (!role) {
+      return res.status(404).json({ message: 'Role not found' });
     }
-
-    const newRole = new Role({ name });
-    const savedRole = await newRole.save();
-
-    res.status(201).json(savedRole);
+    res.json(role);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Function to seed initial roles
-const seedInitialRoles = async () => {
+// Controller function to update a role by ID
+const updateRoleById = async (req, res) => {
   try {
-    const rolesCount = await Role.countDocuments();
-
-    if (rolesCount === 0) {
-      const adminRole = new Role({ name: 'Admin' });
-      await adminRole.save();
-
-      const userRole = new Role({ name: 'User' });
-      await userRole.save();
+    const updatedRole = await Role.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedRole) {
+      return res.status(404).json({ message: 'Role not found' });
     }
+    res.json(updatedRole);
   } catch (error) {
-    console.error('Error seeding initial roles:', error);
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Seed initial roles when the server starts
-seedInitialRoles();
+// Controller function to delete a role by ID
+const deleteRoleById = async (req, res) => {
+  try {
+    const deletedRole = await Role.findByIdAndDelete(req.params.id);
+    if (!deletedRole) {
+      return res.status(404).json({ message: 'Role not found' });
+    }
+    res.json({ message: 'Role deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
-  getRoles,
-  createRole
+  createRole,
+  getAllRoles,
+  getRoleById,
+  updateRoleById,
+  deleteRoleById
 };
