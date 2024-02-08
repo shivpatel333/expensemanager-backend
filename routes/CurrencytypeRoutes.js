@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const currencyTypeController = require('../controllers/CurrencyTypeController');
+const currencyTypeController = require('../controllers/CurrencytypeController');
 
 // Create a new currency type
 router.post('/', currencyTypeController.createCurrencyType);

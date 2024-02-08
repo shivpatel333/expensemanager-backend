@@ -1,4 +1,4 @@
-const AccountType = require('../models/AccountTypeModel');
+const AccountType = require('../models/AccounttypeModel');
 
 // Controller function to create a new account type
 const createAccountType = async (req, res) => {

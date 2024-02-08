@@ -1,4 +1,4 @@
-const CurrencyType = require('../models/CurrencyTypeModel');
+const CurrencyType = require('../models/CurrencytypeModel');
 
 // Controller function to create a new currency type
 const createCurrencyType = async (req, res) => {
