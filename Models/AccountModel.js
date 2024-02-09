@@ -20,7 +20,7 @@ const accountSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  userid: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
