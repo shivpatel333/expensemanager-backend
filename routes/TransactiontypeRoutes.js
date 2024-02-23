@@ -3,10 +3,10 @@ const router = express.Router();
 const transactionTypeController = require('../controllers/TransactiontypeController');
 
 // Create a new transaction type
-router.post('/', transactionTypeController.createTransactionType);
+router.post('/transactiontype', transactionTypeController.createTransactionType);
 
 // Get all transaction types
-router.get('/', transactionTypeController.getAllTransactionTypes);
+router.get('/transactiontype', transactionTypeController.getAllTransactionTypes);
 
 // Get transaction type by ID
 router.get('/:id', transactionTypeController.getTransactionTypeById);

@@ -3,10 +3,10 @@ const router = express.Router();
 const payeeController = require('../controllers/PayeeController');
 
 // Create a new payee
-router.post('/', payeeController.createPayee);
+router.post('/payee', payeeController.createPayee);
 
 // Get all payees
-router.get('/', payeeController.getAllPayees);
+router.get('/payee', payeeController.getAllPayees);
 
 // Get payee by ID
 router.get('/:id', payeeController.getPayeeById);

@@ -3,13 +3,13 @@ const router = express.Router();
 const usersController = require('../controllers/UserController');
 
 // GET all users
-router.get('/', usersController.getUsers);
+router.get('/user', usersController.getUsers);
 
 // GET a single user by ID
 router.get('/:id', usersController.getUserById);
 
 // POST a new user
-router.post('/', usersController.createUser);
+router.post('/user', usersController.createUser);
 
 // PUT update an existing user
 router.put('/:id', usersController.updateUser);

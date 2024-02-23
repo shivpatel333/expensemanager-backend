@@ -3,10 +3,10 @@ const router = express.Router();
 const labelController = require('../controllers/LabelController');
 
 // Create a new label
-router.post('/', labelController.createLabel);
+router.post('/label', labelController.createLabel);
 
 // Get all labels
-router.get('/', labelController.getAllLabels);
+router.get('/label', labelController.getAllLabels);
 
 // Get label by ID
 router.get('/:id', labelController.getLabelById);

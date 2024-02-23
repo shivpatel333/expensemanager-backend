@@ -3,10 +3,10 @@ const router = express.Router();
 const roleController = require('../controllers/RoleController');
 
 // Create a new role
-router.post('/', roleController.createRole);
+router.post('/role', roleController.createRole);
 
 // Get all roles
-router.get('/', roleController.getAllRoles);
+router.get('/role', roleController.getAllRoles);
 
 // Get role by ID
 router.get('/:id', roleController.getRoleById);

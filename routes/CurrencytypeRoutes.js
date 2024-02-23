@@ -3,10 +3,10 @@ const router = express.Router();
 const currencyTypeController = require('../controllers/CurrencytypeController');
 
 // Create a new currency type
-router.post('/', currencyTypeController.createCurrencyType);
+router.post('/currency', currencyTypeController.createCurrencyType);
 
 // Get all currency types
-router.get('/', currencyTypeController.getAllCurrencyTypes);
+router.get('/currency', currencyTypeController.getAllCurrencyTypes);
 
 // Get currency type by ID
 router.get('/:id', currencyTypeController.getCurrencyTypeById);

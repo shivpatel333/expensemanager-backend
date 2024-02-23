@@ -3,10 +3,10 @@ const router = express.Router();
 const subcategoryController = require('../controllers/SubcategoryController');
 
 // Create a new subcategory
-router.post('/', subcategoryController.createSubcategory);
+router.post('/subcategory', subcategoryController.createSubcategory);
 
 // Get all subcategories
-router.get('/', subcategoryController.getAllSubcategories);
+router.get('/subcategory', subcategoryController.getAllSubcategories);
 
 // Get subcategory by ID
 router.get('/:id', subcategoryController.getSubcategoryById);
