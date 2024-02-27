@@ -1,54 +1,38 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
-const PORT = 5000
+const PORT = 5000;
 
+// connecting to db
+var db = mongoose.connect("mongodb://127.0.0.1:27017/expensemanager");
+db.then(() => {
+  console.log("connected to mongodb");
+}).catch((err) => {
+  console.log(err);
+});
 
-//..config...
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
-//connect to mongodb
+// requiring all routes
+const accountRoutes = require("./routes/AccountRoutes");
+const userRoutes = require("./routes/UserRoutes");
+const rolesRoutes = require("./routes/RoleRoutes");
+const categoryRoutes = require("./routes/CategoryRoutes");
+const subcategoryRoutes = require("./routes/SubCategoryRoutes");
+const payeeRoutes = require("./routes/PayeeRoutes");
+const transcationRoutes = require("./routes/TransactionRoutes");
 
-var db = mongoose.connect("mongodb://127.0.0.1:27017/expensemanager")
-db.then(()=>{
-    console.log("connected to mongodb")
-}).catch((err)=>{
-    console.log(err)
-})
+// providing to server all routes
+app.use("/accounts", accountRoutes);
+app.use("/users", userRoutes);
+app.use("/roles", rolesRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/subcategories", subcategoryRoutes);
+app.use("/payees", payeeRoutes);
+app.use("/transactions", transcationRoutes);
 
-//require all routes...
-
-const userRoutes = require("./routes/UserRoutes")
-const categoryRoutes = require("./routes/CategoryRoutes")
-const roleRoutes = require("./routes/RoleRoutes")
-const subcategoryRoutes = require("./routes/SubcategoryRoutes")
-const labelRoutes = require("./routes/LabelRoutes")
-const payeeRoutes = require("./routes/PayeeRoutes")
-const accountRoutes = require("./routes/AccountRoutes")
-const accounttypeRoutes = require("./routes/AccounttypeRoutes")
-const currencytypeRoutes = require("./routes/CurrencytypeRoutes")
-const transactionRoutes = require("./routes/TransactionRoutes")
-const transactiontypeRoutes = require("./routes/TransactiontypeRoutes")
-
-
-//provinding to server all routes...
-
-app.use("/users",userRoutes)
-app.use("/categories",categoryRoutes)
-app.use("/roles",roleRoutes)
-app.use("/subcategories",subcategoryRoutes)
-app.use("/labels",labelRoutes)
-app.use("/payees",payeeRoutes)
-app.use("/accounts",accountRoutes)
-app.use("/accounttypes",accounttypeRoutes)
-app.use("/currencytypes",currencytypeRoutes)
-app.use("/transactions",transactionRoutes)
-app.use("/transactiontypes",transactiontypeRoutes)
-
-
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`)
-    //console.log("server is running on port "+PORT)
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

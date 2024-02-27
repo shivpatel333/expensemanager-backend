@@ -1,20 +1,8 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const payeeController = require('../controllers/PayeeController');
-
-// Create a new payee
-router.post('/payee', payeeController.createPayee);
-
-// Get all payees
-router.get('/payee', payeeController.getAllPayees);
-
-// Get payee by ID
-router.get('/:id', payeeController.getPayeeById);
-
-// Update payee by ID
-router.put('/:id', payeeController.updatePayeeById);
-
-// Delete payee by ID
-router.delete('/:id', payeeController.deletePayeeById);
+router.get('/payee', payeeController.getAllPayee);
+router.post('/payee', payeeController.addPayee);
+router.put('/payee/:id', payeeController.updatePayee);
+router.delete('/payee/:id', payeeController.deletePayee);
 
 module.exports = router;

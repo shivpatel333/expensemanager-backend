@@ -1,35 +1,29 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const accountSchema = new mongoose.Schema({
+const AccountSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    required: true
   },
   balance: {
     type: Number,
-    required: true,
-    default: 0
   },
-  currencyType: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'CurrencyType',
-    required: true
-  },
+  // currencyType: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "CurrencyType",
+  // },
   default: {
-    type: Boolean,
-    default: false
+    type: String,
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
-  accountType: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'AccountType',
-    required: true
-  }
+  // accountType: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "AccountType",
+  // },
 });
 
-module.exports = mongoose.model('Account', accountSchema);
+module.exports = mongoose.model("Account", AccountSchema);

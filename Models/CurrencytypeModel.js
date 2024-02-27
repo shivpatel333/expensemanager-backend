@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const currencyTypeSchema = new mongoose.Schema({
+const CurrencyTypeSchema = new Schema({
   currency: {
     type: String,
-    required: true
-  }
+  },
 });
 
-module.exports = mongoose.model('CurrencyType', currencyTypeSchema);
+module.exports = mongoose.model("CurrencyType", CurrencyTypeSchema);

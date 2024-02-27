@@ -1,42 +1,37 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const transactionSchema = new mongoose.Schema({
+const TransactionSchema = new Schema({
   amount: {
     type: Number,
-    required: true
   },
-  transDateTime: {
+  expDateTime: {
     type: Date,
-    default: Date.now,
-    required: true
   },
   payee: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Payee'
+    type: Schema.Types.ObjectId,
+    ref: "Payee",
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: "Category",
   },
   subcategory: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'SubCategory'
+    type: Schema.Types.ObjectId,
+    ref: "SubCategory",
   },
   paymentMethod: {
-    type: String
+    type: String,
   },
   status: {
     type: String,
-    default: 'Pending'
   },
   description: {
-    type: String
+    type: String,
   },
-  type: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'TransactionType'
-  }
+  transactionType: {
+    type: String,
+  },
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+module.exports = mongoose.model("Transaction", TransactionSchema);

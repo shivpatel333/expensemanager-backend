@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const accountTypeSchema = new mongoose.Schema({
+const AccountTypeSchema = new Schema({
   typeName: {
     type: String,
-    required: true
-  }
+  },
 });
 
-module.exports = mongoose.model('AccountType', accountTypeSchema);
+module.exports = mongoose.model('AccountType', AccountTypeSchema);

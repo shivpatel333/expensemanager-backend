@@ -1,69 +1,82 @@
-const Subcategory = require('../models/SubcategoryModel');
+const SubCategorySchema = require('../models/SubCategoryModel');
 
-// Controller function to create a new subcategory
-const createSubcategory = async (req, res) => {
+const getAllSubCategory = async (req, res) => {
   try {
-    const newSubcategory = new Subcategory(req.body);
-    await newSubcategory.save();
-    res.status(201).json(newSubcategory);
+    const subcat = await SubCategorySchema.find().populate("category");
+    res.status(200).json({
+      message: "SubCategories fetched",
+      flag: 1,
+      data: subcat,
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get all subcategories
-const getAllSubcategories = async (req, res) => {
+const addSubCategory = async (req, res) => {
   try {
-    const subcategories = await Subcategory.find();
-    res.json(subcategories);
+    const subcat = await SubCategorySchema.create(req.body);
+    res.status(201).json({
+      message: "SubCategory added",
+      flag: 1,
+      data: subcat,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get a subcategory by ID
-const getSubcategoryById = async (req, res) => {
+const updateSubCategory = async (req, res) => {
+  const id = req.params.id;
   try {
-    const subcategory = await Subcategory.findById(req.params.id);
-    if (!subcategory) {
-      return res.status(404).json({ message: 'Subcategory not found' });
+    const updateSubCat = await SubCategorySchema.findByIdAndUpdate(id, req.body);
+    if (!updateSubCat) {
+      return res.status(404).json({
+        message: "No subcategory with this ID was found.",
+      });
+    } else {
+      res.status(201).json({
+        message: "Updated subcategory!",
+      });
     }
-    res.json(subcategory);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to update a subcategory by ID
-const updateSubcategoryById = async (req, res) => {
+const deleteSubCategory = async (req, res) => {
+  const id = req.params.id;
   try {
-    const updatedSubcategory = await Subcategory.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedSubcategory) {
-      return res.status(404).json({ message: 'Subcategory not found' });
+    const removedSubCat = await SubCategorySchema.findByIdAndDelete(id);
+    if (!removedSubCat) {
+      return res
+        .status(404)
+        .json({ message: "No subcategory with this ID was found." });
+    } else {
+      res.status(200).json({ message: "deleted subcategory" });
     }
-    res.json(updatedSubcategory);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Controller function to delete a subcategory by ID
-const deleteSubcategoryById = async (req, res) => {
-  try {
-    const deletedSubcategory = await Subcategory.findByIdAndDelete(req.params.id);
-    if (!deletedSubcategory) {
-      return res.status(404).json({ message: 'Subcategory not found' });
-    }
-    res.json({ message: 'Subcategory deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({
+      message: err,
+    });
   }
 };
 
 module.exports = {
-  createSubcategory,
-  getAllSubcategories,
-  getSubcategoryById,
-  updateSubcategoryById,
-  deleteSubcategoryById
+  getAllSubCategory,
+  addSubCategory,
+  updateSubCategory,
+  deleteSubCategory,
 };

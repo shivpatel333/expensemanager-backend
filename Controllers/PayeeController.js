@@ -1,69 +1,82 @@
-const Payee = require('../models/PayeeModel');
+const PayeeSchema = require('../models/PayeeModel');
 
-// Controller function to create a new payee
-const createPayee = async (req, res) => {
+const getAllPayee = async (req, res) => {
   try {
-    const newPayee = new Payee(req.body);
-    await newPayee.save();
-    res.status(201).json(newPayee);
+    const payee = await PayeeSchema.find().populate('user');
+    res.status(200).json({
+      message: "Payee fetched",
+      flag: 1,
+      data: payee,
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get all payees
-const getAllPayees = async (req, res) => {
+const addPayee = async (req, res) => {
   try {
-    const payees = await Payee.find();
-    res.json(payees);
+    const payee = await PayeeSchema.create(req.body);
+    res.status(201).json({
+      message: "Payee added",
+      flag: 1,
+      data: payee,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get a payee by ID
-const getPayeeById = async (req, res) => {
+const updatePayee = async (req, res) => {
+  const id = req.params.id;
   try {
-    const payee = await Payee.findById(req.params.id);
-    if (!payee) {
-      return res.status(404).json({ message: 'Payee not found' });
+    const updatePayee = await PayeeSchema.findByIdAndUpdate(id, req.body);
+    if (!updatePayee) {
+      return res.status(404).json({
+        message: "No payee with this ID was found.",
+      });
+    } else {
+      res.status(201).json({
+        message: "Payee category!",
+      });
     }
-    res.json(payee);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to update a payee by ID
-const updatePayeeById = async (req, res) => {
+const deletePayee = async (req, res) => {
+  const id = req.params.id;
   try {
-    const updatedPayee = await Payee.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedPayee) {
-      return res.status(404).json({ message: 'Payee not found' });
+    const removedPayee = await PayeeSchema.findByIdAndDelete(id);
+    if (!removedPayee) {
+      return res
+        .status(404)
+        .json({ message: "No payee with this ID was found." });
+    } else {
+      res.status(200).json({ message: "deleted payee" });
     }
-    res.json(updatedPayee);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Controller function to delete a payee by ID
-const deletePayeeById = async (req, res) => {
-  try {
-    const deletedPayee = await Payee.findByIdAndDelete(req.params.id);
-    if (!deletedPayee) {
-      return res.status(404).json({ message: 'Payee not found' });
-    }
-    res.json({ message: 'Payee deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({
+      message: err,
+    });
   }
 };
 
 module.exports = {
-  createPayee,
-  getAllPayees,
-  getPayeeById,
-  updatePayeeById,
-  deletePayeeById
+  getAllPayee,
+  addPayee,
+  updatePayee,
+  deletePayee,
 };

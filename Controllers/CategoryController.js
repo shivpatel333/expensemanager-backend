@@ -1,69 +1,82 @@
-const Category = require('../models/CategoryModel');
+const CategorySchema = require('../models/CategoryModel');
 
-// Controller function to create a new category
-const createCategory = async (req, res) => {
+const getAllCategory = async (req, res) => {
   try {
-    const newCategory = new Category(req.body);
-    await newCategory.save();
-    res.status(201).json(newCategory);
+    const category = await CategorySchema.find();
+    res.status(200).json({
+      message: "Categories fetched",
+      flag: 1,
+      data: category,
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get all categories
-const getAllCategories = async (req, res) => {
+const addCategory = async (req, res) => {
   try {
-    const categories = await Category.find();
-    res.json(categories);
+    const cat = await CategorySchema.create(req.body);
+    res.status(201).json({
+      message: "Category added",
+      flag: 1,
+      data: cat,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get a category by ID
-const getCategoryById = async (req, res) => {
+const updateCategory = async (req, res) => {
+  const id = req.params.id;
   try {
-    const category = await Category.findById(req.params.id);
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
+    const updateCat = await CategorySchema.findByIdAndUpdate(id, req.body);
+    if (!updateCat) {
+      return res.status(404).json({
+        message: "No category with this ID was found.",
+      });
+    } else {
+      res.status(201).json({
+        message: "Updated category!",
+      });
     }
-    res.json(category);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to update a category by ID
-const updateCategoryById = async (req, res) => {
+const deleteCategory = async (req, res) => {
+  const id = req.params.id;
   try {
-    const updatedCategory = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedCategory) {
-      return res.status(404).json({ message: 'Category not found' });
+    const removedCat = await CategorySchema.findByIdAndDelete(id);
+    if (!removedCat) {
+      return res
+        .status(404)
+        .json({ message: "No category with this ID was found." });
+    } else {
+      res.status(200).json({ message: "deleted category" });
     }
-    res.json(updatedCategory);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Controller function to delete a category by ID
-const deleteCategoryById = async (req, res) => {
-  try {
-    const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-    if (!deletedCategory) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-    res.json({ message: 'Category deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({
+      message: err,
+    });
   }
 };
 
 module.exports = {
-  createCategory,
-  getAllCategories,
-  getCategoryById,
-  updateCategoryById,
-  deleteCategoryById
+  getAllCategory,
+  addCategory,
+  updateCategory,
+  deleteCategory,
 };

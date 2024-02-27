@@ -1,69 +1,118 @@
-const Transaction = require('../models/TransactionModel');
+const TransactionSchema = require("../models/TransactionModel");
 
-// Controller function to create a new transaction
-const createTransaction = async (req, res) => {
+const getAllTransaction = async (req, res) => {
   try {
-    const newTransaction = new Transaction(req.body);
-    await newTransaction.save();
-    res.status(201).json(newTransaction);
+    const transaction = await TransactionSchema.find()
+      .populate("payee")
+      .populate("category")
+      .populate("subcategory")
+      .exec();
+    res.status(200).json({
+      message: "Transactions fetched",
+      flag: 1,
+      data: transaction,
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get all transactions
-const getAllTransactions = async (req, res) => {
-  try {
-    const transactions = await Transaction.find();
-    res.json(transactions);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Controller function to get a transaction by ID
 const getTransactionById = async (req, res) => {
+  const id = req.params.id;
   try {
-    const transaction = await Transaction.findById(req.params.id);
+    const transaction = await TransactionSchema.findById(id)
+      .populate("payee")
+      .populate("category")
+      .populate("subcategory")
+      .exec();
     if (!transaction) {
-      return res.status(404).json({ message: 'Transaction not found' });
+      return res.status(404).json({
+        message: "No transaction with this ID was found.",
+      });
+    } else {
+      res.status(201).json({
+        message: "Transaction fetched",
+        flag: 1,
+        data: transaction,
+      });
     }
-    res.json(transaction);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to update a transaction by ID
-const updateTransactionById = async (req, res) => {
+const addTransaction = async (req, res) => {
   try {
-    const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedTransaction) {
-      return res.status(404).json({ message: 'Transaction not found' });
-    }
-    res.json(updatedTransaction);
+    const transaction = await TransactionSchema.create(req.body);
+    res.status(201).json({
+      message: "Transaction added",
+      flag: 1,
+      data: transaction,
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to delete a transaction by ID
-const deleteTransactionById = async (req, res) => {
+const updateTransaction = async (req, res) => {
+  const id = req.params.id;
   try {
-    const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
-    if (!deletedTransaction) {
-      return res.status(404).json({ message: 'Transaction not found' });
+    const updateTransaction = await TransactionSchema.findByIdAndUpdate(
+      id,
+      req.body
+    );
+    if (!updateTransaction) {
+      return res.status(404).json({
+        message: "No transaction with this ID was found.",
+      });
+    } else {
+      res.status(201).json({
+        message: "Updated transaction!",
+      });
     }
-    res.json({ message: 'Transaction deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
+  }
+};
+
+const deleteTransaction = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const removedTransaction = await TransactionSchema.findByIdAndDelete(id);
+    if (!removedTransaction) {
+      return res
+        .status(404)
+        .json({ message: "No transaction with this ID was found." });
+    } else {
+      res.status(200).json({ message: "deleted transaction" });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err,
+    });
   }
 };
 
 module.exports = {
-  createTransaction,
-  getAllTransactions,
+  getAllTransaction,
   getTransactionById,
-  updateTransactionById,
-  deleteTransactionById
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
 };

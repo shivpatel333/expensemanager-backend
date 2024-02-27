@@ -1,69 +1,106 @@
-const Account = require('../models/AccountModel');
+const AccountSchema = require("../models/AccountModel");
 
-// Controller function to create a new account
-const createAccount = async (req, res) => {
-  try {
-    const newAccount = new Account(req.body);
-    await newAccount.save();
-    res.status(201).json(newAccount);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Controller function to get all accounts
+// All accounts
 const getAllAccounts = async (req, res) => {
   try {
-    const accounts = await Account.find();
-    res.json(accounts);
+    const account = await AccountSchema.find().populate("user");
+    res.status(200).json({
+      message: "Accounts fetched",
+      flag: 1,
+      data: account,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to get an account by ID
+// Accounts by id
 const getAccountById = async (req, res) => {
+  const id = req.params.id;
   try {
-    const account = await Account.findById(req.params.id);
-    if (!account) {
-      return res.status(404).json({ message: 'Account not found' });
-    }
-    res.json(account);
+    const account = await AccountSchema.findById(id).populate("user");
+    res.status(200).json({
+      message: "Account fetched",
+      flag: 1,
+      data: account,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to update an account by ID
-const updateAccountById = async (req, res) => {
+// Create account
+const addAccount = async (req, res) => {
   try {
-    const updatedAccount = await Account.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedAccount) {
-      return res.status(404).json({ message: 'Account not found' });
-    }
-    res.json(updatedAccount);
+    const account = await AccountSchema.create(req.body);
+    res.status(201).json({
+      message: "Account added",
+      flag: 1,
+      data: account,
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
   }
 };
 
-// Controller function to delete an account by ID
-const deleteAccountById = async (req, res) => {
+// Update account
+const updateAccount = async (req, res) => {
+  const id = req.params.id;
   try {
-    const deletedAccount = await Account.findByIdAndDelete(req.params.id);
-    if (!deletedAccount) {
-      return res.status(404).json({ message: 'Account not found' });
+    const updateAccount = await AccountSchema.findByIdAndUpdate(id, req.body);
+    if (!updateAccount) {
+      return res.status(404).json({
+        message: "No account with this ID was found.",
+      });
+    } else {
+      res.status(201).json({
+        message: "Updated Account!",
+      });
     }
-    res.json({ message: 'Account deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error",
+      flag: -1,
+      data: error,
+    });
+  }
+};
+
+// Delete account by Id
+const deleteAccount = async (req, res) => {
+  const id = req.params.id;
+  try{
+    const removedAccount = await AccountSchema.findByIdAndDelete(id);
+    if(!removedAccount){
+      return res.status(404).json({message:'No account with this ID was found.'})
+    }
+    else{
+      res.status(200).json({message:"deleted account"})
+    }
+  }
+  catch(err){
+    res.status(500).json({
+      message: err
+    })
   }
 };
 
 module.exports = {
-  createAccount,
   getAllAccounts,
   getAccountById,
-  updateAccountById,
-  deleteAccountById
+  addAccount,
+  updateAccount,
+  deleteAccount
 };
